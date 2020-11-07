@@ -54,6 +54,7 @@ const App = () => {
       </div>
 
       <Authors 
+        initialiseQuery={ALL_BOOKS_AND_AUTHORS}
         authors={result.data.allAuthors}
         show={page === 'authors'}
       />

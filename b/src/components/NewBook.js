@@ -56,7 +56,6 @@ const NewBook = (props) => {
 
   return (
     <div>
-    <button onClick={()=>{console.log(props.show)}}>show</button>
       <form onSubmit={submit}>
         <div>
           title
