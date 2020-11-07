@@ -37,6 +37,9 @@ const Authors = (props) => {
   const authors = props.authors
 
 
+
+
+
   const updateAuthor = (event) => {
     event.preventDefault()
 
@@ -71,14 +74,16 @@ const Authors = (props) => {
       <h1>set birthyear</h1>
       <form onSubmit={updateAuthor}>
             <div>
-              <input value={name} onChange={({ target }) => setName(target.value)} placeholder="name"></input>
+              <select onChange={({ target }) => setName(target.value)} >
+                <option hidden >select author</option>
+                {authors.map((author) => <option value={author.name}  key={author.name}>{author.name}</option>)}
+              </select>
             </div>
             <div>
               <input type='number' onChange={({ target }) => setDateOfBirth(parseInt(target.value))} value={dateOfBirth} placeholder="year"></input>
             </div>
             <button type="submit">update author</button>
-      </form>      
-
+      </form>
     </div>
   )
 }
