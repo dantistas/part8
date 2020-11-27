@@ -1,5 +1,26 @@
 const { ApolloServer, gql } = require('apollo-server')
 const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
+const Book = require('./models/book');
+const Author = require('./models/author');
+const author = require('./models/author');
+
+const MONGODB_URI = 'mongodb+srv://rytis:rytis123@cluster0-dihxu.mongodb.net/Books?retryWrites=true&w=majority'
+
+console.log('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+
+  
+
+
+
 
 let authors = [
   {
@@ -26,11 +47,6 @@ let authors = [
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
-
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
-*/
 
 let books = [
   {
@@ -107,7 +123,7 @@ type Book {
 
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String]
 
@@ -149,18 +165,23 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: (root, args) => {
+    addBook: async (root, args)  => {
+      console.log(args)
 
-         const authorMatch = authors.find((author)=> {author.name === args.author}) 
+         const authorMatch = authors.find(author => author.name === args.author)
+
          if(!authorMatch){
-            const authorObject = {name: args.author, id: uuidv4()}
-            authors = authors.concat(authorObject)
+            const author = await new Author({name: args.author, id: uuidv4()})
+            return author.save()
+            // authors = authors.concat(authorObject)
          }
-
          
-         const book = {...args, id: uuidv4()}
-         books = books.concat(book) 
+         
+         const book = await new Book({...args, id: uuidv4()})
+        //  books = books.concat(book) 
+        book.save()
          return book
+
     },
     editAuthor: (root, args) => {
   
