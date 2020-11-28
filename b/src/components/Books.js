@@ -10,6 +10,7 @@ const Books = (props) => {
   return (
     <div>
       <h2>books</h2>
+      <button onClick={()=>{console.log(books)}}>booksai</button>
 
       <table>
         <tbody>
@@ -25,7 +26,7 @@ const Books = (props) => {
           {books.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           )}

@@ -5,7 +5,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 
 import { gql, useQuery } from '@apollo/client'
-
+// bookCount i allauthors ir author i allbooks
 
 const ALL_BOOKS_AND_AUTHORS = gql`
 
@@ -21,7 +21,7 @@ query{
   allBooks{
     title
     published
-    author
+    author{name}
     id
     genres
   }
@@ -51,19 +51,18 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
+        <button onClick={()=>{console.log(result.data)}}>click</button>
       </div>
-
+ 
       <Authors 
         initialiseQuery={ALL_BOOKS_AND_AUTHORS}
         authors={result.data.allAuthors}
         show={page === 'authors'}
       />
-
       <Books
         books={result.data.allBooks}
         show={page === 'books'}
       />
-
       <NewBook
         initialiseQuery={ALL_BOOKS_AND_AUTHORS}
         show={page === 'add'}

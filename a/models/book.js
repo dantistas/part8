@@ -10,13 +10,19 @@ const schema = new mongoose.Schema({
   published: {
     type: Number,
   },
-  author: {
+  author:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Author'
+
+
+    // mongoose.Schema.Types.ObjectId,   <<<---- temporary   sita reike padaryt iskarto gautu info is autoreus
+    // ref: 'Author'
+    
   },
   genres: [
     { type: String}
   ]
 })
 
+  
 module.exports = mongoose.model('Book', schema)

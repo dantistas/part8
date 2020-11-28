@@ -50,6 +50,7 @@ const Authors = (props) => {
 
   return (
     <div>
+      <button onClick={()=>{console.log(authors)}}>clickme</button>
       <h2>authors</h2>
       <table>
         <tbody>

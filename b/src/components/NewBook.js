@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { gql, useMutation } from '@apollo/client'
 
+// i returnus addbook ideti author veliau
 
 const CREATE_BOOK = gql`
 
@@ -13,7 +14,6 @@ const CREATE_BOOK = gql`
       genres: $genres
     ){
       title
-      author
       published
       genres
     }
