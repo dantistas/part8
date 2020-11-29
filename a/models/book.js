@@ -13,10 +13,6 @@ const schema = new mongoose.Schema({
   author:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Author'
-
-
-    // mongoose.Schema.Types.ObjectId,   <<<---- temporary   sita reike padaryt iskarto gautu info is autoreus
-    // ref: 'Author'
     
   },
   genres: [
