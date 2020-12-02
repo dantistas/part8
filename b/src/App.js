@@ -3,8 +3,9 @@ import React, { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import Login from './components/Login'
 
-import { gql, useQuery } from '@apollo/client'
+import { gql, useQuery, useApolloClient } from '@apollo/client'
 // bookCount i allauthors ir author i allbooks
 
 const ALL_BOOKS_AND_AUTHORS = gql`
@@ -33,10 +34,12 @@ query{
 
 const App = () => {
   const [page, setPage] = useState('authors')
+  const [token, setToken] = useState(null)
+  const [notification, setNotification] = useState("")
 
 
   const result = useQuery(ALL_BOOKS_AND_AUTHORS)
-
+  const client = useApolloClient()
 
 
   if(result.loading){
@@ -50,8 +53,11 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
-        <button onClick={()=>{console.log(result.data)}}>click</button>
+        {!token ? <button onClick={() => setPage('login')}>login</button> :[<button onClick={() => setPage('add')}>add book</button>, <button onClick={() => {setToken(null)
+                                                                                                    localStorage.clear()
+                                                                                                    client.resetStore()}}>logout</button>]
+        }
+        <button onClick={()=>{console.log(token, notification)}}>app/state.click</button>
       </div>
  
       <Authors 
@@ -66,6 +72,12 @@ const App = () => {
       <NewBook
         initialiseQuery={ALL_BOOKS_AND_AUTHORS}
         show={page === 'add'}
+      />
+      <Login
+        initialiseQuery={ALL_BOOKS_AND_AUTHORS}
+        setToken={setToken}
+        setNotification={setNotification}
+        show={page === 'login'}
       />
 
     </div>

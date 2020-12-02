@@ -303,7 +303,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
-    console.log("headereis", req.headers.authorization)           // <<<--- pavyko matei reikejo tiesiog rankikiniu budu i playgroundai tokena ideti dabar viskas veike xD 
+    console.log("headereis", req.headers.authorization)      
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(
