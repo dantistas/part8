@@ -147,6 +147,7 @@ type User {
 }
 type Token {
   value: String!
+  user: User!
 }
   type Query {
     me: User  
@@ -189,7 +190,7 @@ const resolvers = {
     }
 
 
-    return { value: jwt.sign(userForToken, JWT_SECRET) }
+    return { value: jwt.sign(userForToken, JWT_SECRET), user: user }
     },
 
     createUser: async (root, args) => {

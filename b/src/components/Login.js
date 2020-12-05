@@ -8,6 +8,10 @@ const LOGIN = gql`
             password: $password
         ){
             value
+            user{
+                username
+                favoriteGenre
+            }
         }
     }
 `
@@ -25,6 +29,8 @@ const LoginForm = (props) => {
     useEffect(()=>{
         if ( result.data ) {
             const token = result.data.login.value
+            const user = result.data.login.user
+            props.setUser(user)
             props.setToken(token)
             localStorage.setItem('user-token', token)
           }
