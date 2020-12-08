@@ -41,11 +41,26 @@ const App = () => {
   const result = useQuery(ALL_BOOKS_AND_AUTHORS)
   const client = useApolloClient()
 
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) => 
+      set.map(p => p.id).includes(object.id)  
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS_AND_AUTHORS })
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS_AND_AUTHORS,
+        data: { allBooks : dataInStore.allBooks.concat(addedBook) }
+      })
+    }   
+  }
+
   useSubscription(BOOK_ADDED, {
-    onSubscriptionData: ({ subscriptionData }) => {
-      window.alert("Book: " + subscriptionData.data.bookAdded.title + " by: " + subscriptionData.data.bookAdded.author.name + " was added!")
-    }
-  })
+      onSubscriptionData: ({ subscriptionData }) => {
+        const addedBook = subscriptionData.data.bookAdded
+        window.alert(`Book: ${addedBook.title} by: ${addedBook.author.name} was added `)
+        updateCacheWith(addedBook)
+      }
+    })
 
   if(result.loading){
     return (
@@ -55,7 +70,6 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={()=>{console.log(notification)}}>notification</button>
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
