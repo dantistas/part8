@@ -6,6 +6,9 @@ const Author = require('./models/author');
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
+
 const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
 
 
@@ -161,6 +164,11 @@ type Query {
     allBooks(author: String, genre: String ): [Book!]!
     allAuthors: [Author!]!  
   }
+
+type Subscription {
+    bookAdded: Book!
+  }  
+
 `
 
 
@@ -240,11 +248,12 @@ const resolvers = {
             }
             try{
               await book.save()
+              pubsub.publish('BOOK_ADDED', { bookAdded: book }) 
             } catch(error){
               throw new UserInputError(error.message,{
                 invalidArgs: args,
               })
-            }   
+            }  
             return book
          } else {
           const book = await new Book({...args, author: authorMatch._id})
@@ -281,9 +290,14 @@ const resolvers = {
       
     }
   
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => {pubsub.asyncIterator(['BOOK_ADDED'])}
+    }
   }
+  
 }
-
 
 
 
@@ -305,6 +319,7 @@ const server = new ApolloServer({
   }
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
