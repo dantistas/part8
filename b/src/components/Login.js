@@ -52,7 +52,6 @@ if(!props.show){
 } else {
     return(
         <div>
-            <button onClick={()=>{console.log(username,password)}}>pushme</button>
             <form onSubmit={submit}>
                 <div>
                     <input placeholder="username"
