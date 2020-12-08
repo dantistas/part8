@@ -1,25 +1,54 @@
 import React, { useState, useEffect } from 'react'
 
 
+import { gql, useLazyQuery } from '@apollo/client'
+
+const RECOMENDED_BOOKS = gql`
+
+    query byGenre($genre:String!){
+        allBooks(genre: $genre){
+            title
+            published
+            author{
+                name
+                born
+                bookCount
+            }
+            genres
+        }
+    }
+
+
+`
+
+
 const Recomended = (props) => {
+
+    const [getRecomendedBooks, result] = useLazyQuery(RECOMENDED_BOOKS)
+    const [recomendedBooks, setRecomendedBooks] = useState(null)
+
+      useEffect(() => {
+        if(props.user){
+            getRecomendedBooks({ variables: { genre: props.user.favoriteGenre } })
+        }
+      }, [props.user])
+      
+      useEffect(()=>{
+        if (result.data) {
+            setRecomendedBooks(result.data.allBooks)
+        }
+      },[result])
 
 
 
     if(!props.show){
         return null
     }else {
-        if(!props.user.favoriteGenre){
+        if(!recomendedBooks){
             return <div>There are no recomendations, because you did not set your favorite genre yet!</div>
         }else {
-                
-            const books = props.books.filter((b)=>{
-                if(b.genres.indexOf(props.user.favoriteGenre)>= 0){
-                  return b
-                }
-              })
             return (
                 <div>
-                <button onClick={()=>{console.log(props.user)}}>????</button>
                 <h2>Recomended for you: </h2>
                 <table>
                     <tbody>
@@ -34,7 +63,7 @@ const Recomended = (props) => {
                         Published
                         </th>
                     </tr>
-                    {books.map(b =>
+                    {recomendedBooks.map(b =>
                         <tr key={b.title}>
                         <td>{b.title}</td>
                         <td>{b.author.name}</td>

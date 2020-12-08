@@ -7,7 +7,6 @@ import Login from './components/Login'
 import Recomended from './components/Recomended'
 
 import { gql, useQuery, useApolloClient } from '@apollo/client'
-// bookCount i allauthors ir author i allbooks
 
 const ALL_BOOKS_AND_AUTHORS = gql`
 
@@ -39,7 +38,6 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState("")
 
-
   const result = useQuery(ALL_BOOKS_AND_AUTHORS)
   const client = useApolloClient()
 
@@ -59,7 +57,6 @@ const App = () => {
                                                                             <button onClick={() => setPage('recomended')}>Recomended</button>, 
                                                                             <button onClick={() => {setToken(null); localStorage.clear(); client.resetStore()}}>logout</button>]
         }
-        <button onClick={()=>{console.log("user:  ",user," , Token:  ",token, ", Notification: ", notification)}}>user/token/notification</button>
       </div>
  
       <Authors 

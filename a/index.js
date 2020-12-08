@@ -127,6 +127,7 @@ type Mutation {
     setBornTo:Int!
   ): Author
 }
+
 type Book {
     title: String!
     published: Int!
@@ -134,22 +135,26 @@ type Book {
     id: ID!
     genres: [String]
 }
+
 type Author {
   name: String
   id: ID
   born: Int
   bookCount: Int
 }
+
 type User {
   username: String!
   favoriteGenre: String!
   id: ID!
 }
+
 type Token {
   value: String!
   user: User!
 }
-  type Query {
+
+type Query {
     me: User  
     bookCount: Int!
     authorCount: Int!

@@ -33,12 +33,6 @@ const filterByGenre = (genre) => {
   }))
 }
 
-
-
-
-
-
-
   if (!props.show) {
     return null
   }
@@ -47,7 +41,6 @@ const filterByGenre = (genre) => {
   return (
     <div>
       <h2>Books</h2>
-      <button onClick={()=>{console.log(genreButtons)}}>genrebuttonms</button>
       <table>
         <tbody>
           <tr>
